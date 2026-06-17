@@ -44,10 +44,10 @@
 
 /* Page content container — applied to header, footer, and <main> on every page.
    Unlayered (outside @layer) so it overrides Tailwind's built-in `.container`
-   utility, whose responsive max-widths would otherwise cap width below 1920px. */
+   utility, whose responsive max-widths would otherwise cap width below 2100px. */
 .container {
   width: 100%;
-  max-width: 1920px;
+  max-width: 2100px;
   margin-left: auto;
   margin-right: auto;
   padding-left: 5vw;
