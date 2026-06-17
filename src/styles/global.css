@@ -47,8 +47,8 @@
   .wrapper {
     max-width: 1920px;
     margin: 0 auto;
-    padding-left: 100px;
-    padding-right: 100px;
+    padding-left: 5vw;
+    padding-right: 5vw;
   }
 
   /* Slide-out drawer + overlay (used by Drawer.astro, wired in Base.astro) */
