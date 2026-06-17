@@ -1,0 +1,9 @@
+# Clear
+
+> Replace this description in astro.config.mjs (okf integration options).
+> This file is regenerated on every build by src/integrations/okf.js.
+
+## Pages
+- [/](https://DOMAIN.com/)
+- [/about](https://DOMAIN.com/about)
+- [/contact](https://DOMAIN.com/contact)

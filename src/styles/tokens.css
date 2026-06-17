@@ -1,0 +1,67 @@
+/* tokens.css — design tokens for the Clear template.
+   - Fluid type scale exposed to Tailwind via @theme (text-xs … text-5xl)
+   - Fluid space scale exposed as CSS vars (use as [var(--space-md)])
+   - Semantic colour tokens with light/dark theming (body.dark) */
+
+@theme {
+  /* Typeface — Mulish is self-hosted via @fontsource (imported in Base.astro) */
+  --font-sans: "Mulish", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Fluid type scale (≈360px → 1240px viewport) */
+  --text-xs: clamp(0.75rem, 0.71rem + 0.18vw, 0.83rem);
+  --text-sm: clamp(0.875rem, 0.83rem + 0.21vw, 0.97rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.13rem);
+  --text-lg: clamp(1.13rem, 1.05rem + 0.36vw, 1.31rem);
+  --text-xl: clamp(1.27rem, 1.15rem + 0.55vw, 1.58rem);
+  --text-2xl: clamp(1.6rem, 1.4rem + 0.9vw, 2.1rem);
+  --text-3xl: clamp(2rem, 1.68rem + 1.45vw, 2.8rem);
+  --text-4xl: clamp(2.5rem, 2rem + 2.25vw, 3.75rem);
+  --text-5xl: clamp(3.05rem, 2.3rem + 3.4vw, 5rem);
+}
+
+/* Fluid space scale — referenced via arbitrary utilities, e.g. px-[var(--space-md)] */
+:root {
+  --space-2xs: clamp(0.5rem, 0.46rem + 0.18vw, 0.63rem);
+  --space-xs: clamp(0.75rem, 0.68rem + 0.3vw, 0.94rem);
+  --space-sm: clamp(1rem, 0.91rem + 0.4vw, 1.25rem);
+  --space-md: clamp(1.5rem, 1.36rem + 0.6vw, 1.88rem);
+  --space-lg: clamp(2rem, 1.8rem + 0.9vw, 2.81rem);
+  --space-xl: clamp(3rem, 2.6rem + 1.8vw, 4.5rem);
+  --space-2xl: clamp(4rem, 3.3rem + 3vw, 6.75rem);
+  --space-3xl: clamp(6rem, 5rem + 4.4vw, 10rem);
+}
+
+/* Semantic colour tokens — light theme */
+:root {
+  --c-bg: #ffffff;
+  --c-surface: #f5f6f7;
+  --c-text: #15181c;
+  --c-muted: #5b636e;
+  --c-border: #e3e6ea;
+  --c-accent: #2563eb;
+  --c-accent-contrast: #ffffff;
+  --c-overlay: rgb(15 18 22 / 0.45);
+}
+
+/* Dark theme — toggled by adding `.dark` to <body> */
+body.dark {
+  --c-bg: #0e1116;
+  --c-surface: #161b22;
+  --c-text: #e8eaed;
+  --c-muted: #9aa3ad;
+  --c-border: #272d36;
+  --c-accent: #5b8cff;
+  --c-accent-contrast: #0e1116;
+  --c-overlay: rgb(0 0 0 / 0.6);
+}
+
+/* Map semantic colours onto Tailwind utilities (bg-bg, text-muted, border-border, …) */
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-surface: var(--c-surface);
+  --color-text: var(--c-text);
+  --color-muted: var(--c-muted);
+  --color-border: var(--c-border);
+  --color-accent: var(--c-accent);
+  --color-accent-contrast: var(--c-accent-contrast);
+}

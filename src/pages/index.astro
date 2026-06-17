@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+
+const features = [
+  { title: 'Fluid by default', body: 'Type and spacing scale smoothly across every viewport — no breakpoints to babysit.' },
+  { title: 'Light & dark', body: 'A single toggle, remembered across visits and respectful of system preference.' },
+  { title: 'LLM-ready', body: 'llms.txt, an OKF bundle, and a sitemap are generated on every build.' },
+];
+---
+
+<Base
+  title="Clear — a fast, clean starter"
+  description="A minimal Astro + Tailwind starter: fluid type, light/dark, and 100/100 Lighthouse out of the box."
+>
+  <section class="mx-auto max-w-6xl px-[var(--space-sm)] py-[var(--space-2xl)]">
+    <p class="text-sm font-bold uppercase tracking-widest text-accent">Clear template</p>
+    <h1 class="mt-[var(--space-sm)] max-w-3xl text-5xl">Ship a clean, fast site in minutes.</h1>
+    <p class="mt-[var(--space-md)] max-w-2xl text-lg text-muted">
+      A minimal Astro starter with a full fluid type and space system, light/dark theming,
+      and a slide-out drawer — ready to brand and deploy to Cloudflare Pages.
+    </p>
+    <div class="mt-[var(--space-lg)] flex flex-wrap gap-[var(--space-sm)]">
+      <a href="/contact" class="rounded-md bg-accent px-[var(--space-md)] py-[var(--space-xs)] font-semibold text-accent-contrast transition-opacity hover:opacity-90">
+        Get in touch
+      </a>
+      <a href="/about" class="rounded-md border border-border px-[var(--space-md)] py-[var(--space-xs)] font-semibold transition-colors hover:bg-surface">
+        Learn more
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-[var(--space-sm)] pb-[var(--space-2xl)]">
+    <div class="grid gap-[var(--space-md)] sm:grid-cols-3">
+      {features.map((f) => (
+        <article class="rounded-xl border border-border bg-surface p-[var(--space-md)]">
+          <h2 class="text-xl">{f.title}</h2>
+          <p class="mt-[var(--space-2xs)] text-muted">{f.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</Base>

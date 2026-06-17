@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Contact — Clear" description="Get in touch.">
+  <section class="mx-auto max-w-xl px-[var(--space-sm)] py-[var(--space-2xl)]">
+    <h1 class="text-4xl">Contact</h1>
+    <p class="mt-[var(--space-md)] text-lg text-muted">
+      We'd love to hear from you. Fill in the form and we'll get back to you shortly.
+    </p>
+
+    <!-- Wire this to Resend (or your provider) on launch — see the launch SOP. -->
+    <form class="mt-[var(--space-lg)] flex flex-col gap-[var(--space-sm)]" method="post" action="#">
+      <label class="flex flex-col gap-[var(--space-2xs)] text-sm font-semibold">
+        Name
+        <input
+          type="text"
+          name="name"
+          required
+          class="rounded-md border border-border bg-bg px-[var(--space-sm)] py-[var(--space-2xs)] text-base"
+        />
+      </label>
+      <label class="flex flex-col gap-[var(--space-2xs)] text-sm font-semibold">
+        Email
+        <input
+          type="email"
+          name="email"
+          required
+          class="rounded-md border border-border bg-bg px-[var(--space-sm)] py-[var(--space-2xs)] text-base"
+        />
+      </label>
+      <label class="flex flex-col gap-[var(--space-2xs)] text-sm font-semibold">
+        Message
+        <textarea
+          name="message"
+          rows="5"
+          required
+          class="rounded-md border border-border bg-bg px-[var(--space-sm)] py-[var(--space-2xs)] text-base"
+        ></textarea>
+      </label>
+      <button
+        type="submit"
+        class="mt-[var(--space-2xs)] self-start rounded-md bg-accent px-[var(--space-md)] py-[var(--space-xs)] font-semibold text-accent-contrast transition-opacity hover:opacity-90"
+      >
+        Send message
+      </button>
+    </form>
+  </section>
+</Base>
