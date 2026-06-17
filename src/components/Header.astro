@@ -33,18 +33,18 @@ const current = Astro.url.pathname.replace(/\/$/, '') || '/';
       </ul>
     </nav>
 
-    <!-- Hamburger (right) -->
+    <!-- Hamburger (right) — SF Symbol: text.menu, no border -->
     <button
       type="button"
       data-drawer-open
       aria-controls="drawer"
       aria-label="Open menu"
-      class="inline-flex h-10 w-10 items-center justify-center justify-self-end rounded-md border border-border transition-colors hover:bg-surface"
+      class="inline-flex h-10 w-10 items-center justify-center justify-self-end transition-colors hover:text-accent"
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="3" y1="18" x2="21" y2="18" />
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3.5" y1="7" x2="20.5" y2="7" />
+        <line x1="3.5" y1="12" x2="20.5" y2="12" />
+        <line x1="3.5" y1="17" x2="20.5" y2="17" />
       </svg>
     </button>
   </div>
