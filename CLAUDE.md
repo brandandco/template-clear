@@ -43,9 +43,9 @@ public/         robots.txt, llms.txt, favicons, fonts/, okf/
 
 ## Theming
 
-Light/dark is a `dark` class on `<body>`, persisted to `localStorage` (`theme`) and
-defaulting to the system preference. A no-flash inline script sets it before paint;
-`[data-theme-toggle]` buttons flip it.
+Light/dark is a `dark` class on `<html>`, persisted to `localStorage` (`theme`) and
+defaulting to the system preference. A no-flash inline script in `<head>` sets it
+before paint; `[data-theme-toggle]` buttons flip it.
 
 ## Layout
 

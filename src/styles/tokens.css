@@ -1,7 +1,7 @@
 /* tokens.css — design tokens for the Clear template.
    - Fluid type scale exposed to Tailwind via @theme (text-xs … text-5xl)
    - Fluid space scale exposed as CSS vars (use as [var(--space-md)])
-   - Semantic colour tokens with light/dark theming (body.dark) */
+   - Semantic colour tokens with light/dark theming (html.dark) */
 
 @theme {
   /* Typeface — Mulish is self-hosted via @fontsource (imported in Base.astro) */
@@ -43,8 +43,8 @@
   --c-overlay: rgb(15 18 22 / 0.45);
 }
 
-/* Dark theme — toggled by adding `.dark` to <body> */
-body.dark {
+/* Dark theme — toggled by adding `.dark` to <html> */
+html.dark {
   --c-bg: #0e1116;
   --c-surface: #161b22;
   --c-text: #e8eaed;

@@ -23,9 +23,8 @@ const { title, description, image } = Astro.props;
 <html lang="en">
   <head>
     <SEO title={title} description={description} image={image} />
-  </head>
-  <body>
-    <!-- No-flash theme init: runs before paint, sets body.dark from localStorage -->
+
+    <!-- No-flash theme init: runs in <head> before paint, sets html.dark from localStorage -->
     <script is:inline>
       (function () {
         try {
@@ -33,11 +32,12 @@ const { title, description, image } = Astro.props;
           if (!t) {
             t = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
           }
-          if (t === 'dark') document.body.classList.add('dark');
+          if (t === 'dark') document.documentElement.classList.add('dark');
         } catch (e) {}
       })();
     </script>
-
+  </head>
+  <body>
     <a
       href="#main"
       class="sr-only focus:not-sr-only focus:absolute focus:left-[var(--space-sm)] focus:top-[var(--space-sm)] focus:z-[60] focus:rounded-md focus:bg-accent focus:px-[var(--space-sm)] focus:py-[var(--space-2xs)] focus:text-accent-contrast"
@@ -55,18 +55,19 @@ const { title, description, image } = Astro.props;
     <Footer />
 
     <script>
+      const root = document.documentElement;
       const body = document.body;
 
-      // Theme toggle (body class + localStorage)
+      // Theme toggle (html class + localStorage)
       function setTheme(theme: string) {
-        body.classList.toggle('dark', theme === 'dark');
+        root.classList.toggle('dark', theme === 'dark');
         try {
           localStorage.setItem('theme', theme);
         } catch (e) {}
       }
       document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
         btn.addEventListener('click', () => {
-          setTheme(body.classList.contains('dark') ? 'light' : 'dark');
+          setTheme(root.classList.contains('dark') ? 'light' : 'dark');
         });
       });
 
@@ -77,13 +78,13 @@ const { title, description, image } = Astro.props;
       function openDrawer() {
         drawer?.classList.add('is-open');
         overlay?.classList.add('is-open');
-        drawer?.setAttribute('aria-hidden', 'false');
+        drawer?.removeAttribute('inert');
         body.style.overflow = 'hidden';
       }
       function closeDrawer() {
         drawer?.classList.remove('is-open');
         overlay?.classList.remove('is-open');
-        drawer?.setAttribute('aria-hidden', 'true');
+        drawer?.setAttribute('inert', '');
         body.style.overflow = '';
       }
 
