@@ -8,8 +8,8 @@ const links = [
 const current = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
-<header class="sticky top-0 z-30 border-b border-border bg-bg/80 backdrop-blur">
-  <div class="container grid grid-cols-[1fr_auto_1fr] items-center py-[var(--space-xs)]">
+<header class="sticky top-0 z-30 h-[100px] min-h-[100px] bg-bg/80 backdrop-blur">
+  <div class="container grid h-full grid-cols-[1fr_auto_1fr] items-center">
     <!-- Logo (left) -->
     <a href="/" class="justify-self-start text-xl font-extrabold tracking-tight">Clear</a>
 
