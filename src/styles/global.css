@@ -95,4 +95,13 @@
   .drawer.is-open {
     transform: translateX(0);
   }
+
+  /* Full-width drawer on mobile (below the md breakpoint) */
+  @media (max-width: 767px) {
+    .drawer {
+      width: 100%;
+      max-width: 100%;
+      border-left: 0;
+    }
+  }
 }
