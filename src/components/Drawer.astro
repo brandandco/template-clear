@@ -36,16 +36,18 @@ const links = [
   </nav>
 
   <div class="mt-auto pt-[var(--space-lg)]">
+    <!-- Dark / light mode toggle -->
     <button
       type="button"
       data-theme-toggle
-      class="inline-flex items-center gap-[var(--space-2xs)] rounded-md border border-border px-[var(--space-sm)] py-[var(--space-2xs)] text-sm font-semibold transition-colors hover:bg-bg"
+      aria-label="Toggle dark / light mode"
+      class="inline-flex h-10 w-10 items-center justify-center transition-colors hover:text-accent"
     >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <g fill="currentColor" fill-rule="nonzero">
+          <path d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z"/>
+        </g>
       </svg>
-      <span>Toggle theme</span>
     </button>
   </div>
 </aside>
