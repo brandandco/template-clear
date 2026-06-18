@@ -1,6 +1,7 @@
 ---
 // Builds default WebSite + Organization + WebPage schema
 // from site config. Extensible with additional schemas per page.
+import { siteConfig } from '../site.config.mjs';
 
 const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 
@@ -19,20 +20,20 @@ const url = `${site}${page.path}`;
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": import.meta.env.SITE_NAME ?? 'Clear',
+  "name": siteConfig.name,
   "url": site,
-  "description": import.meta.env.SITE_DESCRIPTION ?? '',
+  "description": siteConfig.description,
 };
 
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": import.meta.env.SITE_NAME ?? 'Clear',
+  "name": siteConfig.name,
   "url": site,
   "logo": `${site}/favicon.svg`,
   "contactPoint": {
     "@type": "ContactPoint",
-    "email": import.meta.env.SITE_EMAIL ?? '',
+    "email": siteConfig.email,
     "contactType": "customer service"
   }
 };

@@ -1,4 +1,6 @@
 ---
+import { siteConfig } from '../site.config.mjs';
+
 interface Props {
   title: string;
   description: string;
@@ -12,7 +14,7 @@ const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
 const { title, description, canonical, image, schema, type = 'website' } = Astro.props;
 const canonicalURL = canonical ?? `${site}${Astro.url.pathname}`;
 const ogImage = image ?? `${site}/og-default.png`;
-const fullTitle = `${title} | ${import.meta.env.SITE_NAME ?? 'Clear'}`;
+const fullTitle = `${title} | ${siteConfig.name}`;
 ---
 
 <!-- Primary -->
@@ -33,7 +35,7 @@ const fullTitle = `${title} | ${import.meta.env.SITE_NAME ?? 'Clear'}`;
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImage} />
-<meta property="og:site_name" content={import.meta.env.SITE_NAME ?? 'Clear'} />
+<meta property="og:site_name" content={siteConfig.name} />
 <meta property="og:locale" content="en_US" />
 
 <!-- Twitter -->
