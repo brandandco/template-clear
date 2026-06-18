@@ -1,34 +1,51 @@
 ---
 interface Props {
   title: string;
-  description?: string;
+  description: string;
+  canonical?: string;
   image?: string;
+  schema?: object | object[];
+  type?: 'website' | 'article' | 'contact' | 'about';
 }
 
-const { title, description = 'A clean, fast website.', image } = Astro.props;
-
-const base = Astro.site ?? new URL(Astro.url.origin);
-const canonical = new URL(Astro.url.pathname, base);
-const ogImage = image ? new URL(image, base) : undefined;
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+const { title, description, canonical, image, schema, type = 'website' } = Astro.props;
+const canonicalURL = canonical ?? `${site}${Astro.url.pathname}`;
+const ogImage = image ?? `${site}/og-default.png`;
+const fullTitle = `${title} | ${import.meta.env.SITE_NAME ?? 'Clear'}`;
 ---
 
-<meta charset="utf-8" />
+<!-- Primary -->
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="generator" content={Astro.generator} />
-
-<title>{title}</title>
+<title>{fullTitle}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical.href} />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Sitemap + Favicon -->
 <link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
-<meta property="og:type" content="website" />
-<meta property="og:title" content={title} />
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
-<meta property="og:url" content={canonical.href} />
-{ogImage && <meta property="og:image" content={ogImage.href} />}
+<meta property="og:image" content={ogImage} />
+<meta property="og:site_name" content={import.meta.env.SITE_NAME ?? 'Clear'} />
+<meta property="og:locale" content="en_US" />
 
+<!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
+<meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
-{ogImage && <meta name="twitter:image" content={ogImage.href} />}
+<meta name="twitter:image" content={ogImage} />
+
+<!-- JSON-LD -->
+{schema && (
+  <script
+    type="application/ld+json"
+    set:html={JSON.stringify(Array.isArray(schema) ? schema : [schema])}
+  />
+)}

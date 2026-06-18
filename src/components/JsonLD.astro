@@ -1,0 +1,79 @@
+---
+// Builds default WebSite + Organization + WebPage schema
+// from site config. Extensible with additional schemas per page.
+
+const site = Astro.site?.toString().replace(/\/$/, '') ?? '';
+
+interface Props {
+  page: {
+    title: string;
+    description: string;
+    path: string;
+  };
+  extra?: object[];
+}
+
+const { page, extra = [] } = Astro.props;
+const url = `${site}${page.path}`;
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": import.meta.env.SITE_NAME ?? 'Clear',
+  "url": site,
+  "description": import.meta.env.SITE_DESCRIPTION ?? '',
+};
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": import.meta.env.SITE_NAME ?? 'Clear',
+  "url": site,
+  "logo": `${site}/favicon.svg`,
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": import.meta.env.SITE_EMAIL ?? '',
+    "contactType": "customer service"
+  }
+};
+
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": page.title,
+  "description": page.description,
+  "url": url,
+  "isPartOf": { "@id": site }
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": site
+    },
+    ...(page.path !== '/' ? [{
+      "@type": "ListItem",
+      "position": 2,
+      "name": page.title,
+      "item": url
+    }] : [])
+  ]
+};
+
+const allSchemas = [
+  websiteSchema,
+  organizationSchema,
+  webPageSchema,
+  breadcrumbSchema,
+  ...extra
+];
+---
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(allSchemas)}
+/>

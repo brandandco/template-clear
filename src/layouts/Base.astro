@@ -6,23 +6,26 @@ import '@fontsource/mulish/700.css';
 import '@fontsource/mulish/800.css';
 
 import SEO from '../components/SEO.astro';
+import JsonLD from '../components/JsonLD.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Drawer from '../components/Drawer.astro';
 
 interface Props {
   title: string;
-  description?: string;
+  description: string;
   image?: string;
+  schema?: object[];
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, schema = [] } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <SEO title={title} description={description} image={image} />
+    <JsonLD page={{ title, description, path: Astro.url.pathname }} extra={schema} />
 
     <!-- No-flash theme init: runs in <head> before paint, sets html.dark from localStorage -->
     <script is:inline>

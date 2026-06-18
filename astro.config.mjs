@@ -21,6 +21,30 @@ export default defineConfig({
 
   integrations: [
     sitemap(),
-    okf({ name: 'Clear', description: 'A clean, fast website.' }),
+    okf({
+      name: 'SITE_NAME',
+      description: 'SITE_DESCRIPTION',
+      tagline: 'SITE_TAGLINE',
+      email: 'SITE_EMAIL',
+      phone: 'SITE_PHONE',
+      address: 'SITE_ADDRESS',
+      pages: {
+        '/': {
+          title: 'Home',
+          description: 'HOMEPAGE_DESCRIPTION',
+          tags: [],
+        },
+        '/about': {
+          title: 'About',
+          description: 'ABOUT_DESCRIPTION',
+          tags: [],
+        },
+        '/contact': {
+          title: 'Contact',
+          description: 'CONTACT_DESCRIPTION',
+          tags: [],
+        },
+      },
+    }),
   ],
 });

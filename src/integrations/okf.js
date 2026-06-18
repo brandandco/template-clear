@@ -1,72 +1,154 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-/**
- * OKF (Open Knowledge File) — build integration for the Clear template.
- *
- * After each production build it writes two machine-readable artifacts into
- * the output directory, derived from the site's `site` URL and the options
- * passed here (single source of truth lives in astro.config.mjs):
- *
- *   /llms.txt          plain-text site map for LLM crawlers (https://llmstxt.org/)
- *   /okf/bundle.json   structured knowledge bundle describing the site
- *
- * @param {object}   [options]
- * @param {string}   [options.name]        Site / brand name.
- * @param {string}   [options.description] One-line site description.
- * @param {string[]} [options.exclude]     Route slugs to omit (default: ['404']).
- */
-export default function okf(options = {}) {
-  let siteUrl = '';
+export default function okfIntegration(options = {}) {
+  let siteConfig = {};
 
   return {
-    name: 'okf',
+    name: 'okf-integration',
     hooks: {
       'astro:config:done': ({ config }) => {
-        siteUrl = config.site ? String(config.site).replace(/\/$/, '') : '';
+        siteConfig = {
+          site: config.site?.toString().replace(/\/$/, '') ?? '',
+          name: options.name ?? 'Clear',
+          description: options.description ?? '',
+          tagline: options.tagline ?? '',
+          email: options.email ?? '',
+          phone: options.phone ?? '',
+          address: options.address ?? '',
+        };
       },
+      'astro:build:done': async ({ pages, dir }) => {
+        const { writeFile, mkdir } = await import('node:fs/promises');
+        const { join } = await import('node:path');
+        const { fileURLToPath } = await import('node:url');
+        const dirPath = fileURLToPath(dir);
 
-      'astro:build:done': async ({ dir, pages, logger }) => {
-        const outDir = fileURLToPath(dir);
-        const name = options.name || 'Untitled site';
-        const description = options.description || '';
-        const exclude = new Set(options.exclude || ['404']);
+        // Build page list — normalize to leading-slash, no-trailing-slash ('' -> '/')
+        const routes = [...new Set(
+          pages
+            .map((p) => '/' + p.pathname.replace(/^\/+/, '').replace(/\/$/, ''))
+            .filter((p) => !p.includes('404'))
+            .sort()
+        )];
 
-        const routes = pages
-          .map((p) => p.pathname.replace(/index\.html$/, '').replace(/\.html$/, ''))
-          .map((p) => '/' + p.replace(/^\/+/, '').replace(/\/$/, ''))
-          .filter((r) => !exclude.has(r.replace(/^\//, '')))
-          .filter((r, i, arr) => arr.indexOf(r) === i)
-          .sort();
+        const pagesMeta = options.pages ?? {};
 
-        // llms.txt — https://llmstxt.org/
+        // ── llms.txt ──────────────────────────────
         const llms = [
-          `# ${name}`,
-          '',
-          ...(description ? [`> ${description}`, ''] : []),
-          '## Pages',
-          ...routes.map((r) => `- [${r}](${siteUrl}${r})`),
-          '',
-        ].join('\n');
-        await fs.writeFile(path.join(outDir, 'llms.txt'), llms, 'utf-8');
+          `# ${siteConfig.name}`,
+          ``,
+          `> ${siteConfig.tagline || siteConfig.description}`,
+          ``,
+          `## About`,
+          `${siteConfig.description}`,
+          ``,
+          siteConfig.email ? `- Email: ${siteConfig.email}` : '',
+          siteConfig.phone ? `- Phone: ${siteConfig.phone}` : '',
+          siteConfig.address ? `- Address: ${siteConfig.address}` : '',
+          ``,
+          `## Pages`,
+          ...routes.map((route) => {
+            const meta = pagesMeta[route] ?? {};
+            const label = meta.title ?? routeToTitle(route);
+            const desc = meta.description ? ` — ${meta.description}` : '';
+            return `- [${label}](${siteConfig.site}${route})${desc}`;
+          }),
+        ].filter((line) => line !== '').join('\n');
 
-        // OKF bundle — structured JSON
+        await writeFile(join(dirPath, 'llms.txt'), llms);
+
+        // ── OKF index.md ──────────────────────────
+        const okfDir = join(dirPath, 'okf');
+        await mkdir(okfDir, { recursive: true });
+
+        const index = [
+          `---`,
+          `type: Index`,
+          `title: ${siteConfig.name} Knowledge Bundle`,
+          `description: ${siteConfig.description}`,
+          `resource: ${siteConfig.site}/okf/index.md`,
+          `generated: ${new Date().toISOString()}`,
+          `---`,
+          ``,
+          `# ${siteConfig.name} — Knowledge Bundle`,
+          ``,
+          `> ${siteConfig.tagline || siteConfig.description}`,
+          ``,
+          `## Pages`,
+          ...routes.map((route) => {
+            const meta = pagesMeta[route] ?? {};
+            const label = meta.title ?? routeToTitle(route);
+            return `- [${label}](${siteConfig.site}${route}) — [OKF](${siteConfig.site}/okf${route === '/' ? '/home' : route}.md)`;
+          }),
+        ].join('\n');
+
+        await writeFile(join(okfDir, 'index.md'), index);
+
+        // ── OKF per-page .md files ─────────────────
+        for (const route of routes) {
+          const meta = pagesMeta[route] ?? {};
+          const slug = route === '/' ? 'home' : route.replace(/^\//, '').replace(/\/$/, '');
+          const label = meta.title ?? routeToTitle(route);
+          const desc = meta.description ?? siteConfig.description;
+
+          const content = [
+            `---`,
+            `type: WebPage`,
+            `title: ${label}`,
+            `description: ${desc}`,
+            `resource: ${siteConfig.site}${route}`,
+            `tags: ${JSON.stringify(meta.tags ?? [])}`,
+            `---`,
+            ``,
+            `# ${label}`,
+            ``,
+            desc,
+          ].join('\n');
+
+          await writeFile(join(okfDir, `${slug}.md`), content);
+        }
+
+        // ── OKF bundle.json ────────────────────────
         const bundle = {
           okf: '1.0',
           generated: new Date().toISOString(),
-          site: { name, description, url: siteUrl },
-          pages: routes.map((r) => ({ path: r, url: `${siteUrl}${r}` })),
+          site: {
+            name: siteConfig.name,
+            description: siteConfig.description,
+            url: siteConfig.site,
+            tagline: siteConfig.tagline,
+            contact: {
+              email: siteConfig.email,
+              phone: siteConfig.phone,
+              address: siteConfig.address,
+            }
+          },
+          pages: routes.map((route) => {
+            const meta = pagesMeta[route] ?? {};
+            return {
+              path: route,
+              url: `${siteConfig.site}${route}`,
+              title: meta.title ?? routeToTitle(route),
+              description: meta.description ?? siteConfig.description,
+              tags: meta.tags ?? [],
+            };
+          }),
         };
-        await fs.mkdir(path.join(outDir, 'okf'), { recursive: true });
-        await fs.writeFile(
-          path.join(outDir, 'okf', 'bundle.json'),
-          JSON.stringify(bundle, null, 2),
-          'utf-8',
+
+        await writeFile(
+          join(okfDir, 'bundle.json'),
+          JSON.stringify(bundle, null, 2)
         );
 
-        logger.info(`wrote llms.txt + okf/bundle.json (${routes.length} pages)`);
-      },
-    },
+        console.log(`[okf] llms.txt + okf/index.md + ${routes.length} page files + bundle.json`);
+      }
+    }
   };
+}
+
+function routeToTitle(route) {
+  if (route === '/') return 'Home';
+  return route
+    .replace(/^\//, '')
+    .replace(/\/$/, '')
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, (c) => c.toUpperCase());
 }

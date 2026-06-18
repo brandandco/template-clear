@@ -1,8 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
+
+const contactSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Contact",
+  "url": `${Astro.site}contact`,
+};
 ---
 
-<Base title="Contact — Clear" description="Get in touch.">
+<Base title="Contact — Clear" description="Get in touch." schema={[contactSchema]}>
   <section class="mx-auto max-w-xl py-[var(--space-2xl)]">
     <h1 class="text-4xl">Contact</h1>
     <p class="mt-[var(--space-md)] text-lg text-muted">
