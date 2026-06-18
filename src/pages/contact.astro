@@ -16,8 +16,20 @@ const contactSchema = {
       We'd love to hear from you. Fill in the form and we'll get back to you shortly.
     </p>
 
-    <!-- Wire this to Resend (or your provider) on launch — see the launch SOP. -->
-    <form class="mt-[var(--space-lg)] flex flex-col gap-[var(--space-sm)]" method="post" action="#">
+    <!-- Success message (shown after submit) -->
+    <p id="success" class="mt-[var(--space-lg)] text-lg" style="display: none;">
+      Thanks — your message is on its way. We'll be in touch soon.
+    </p>
+
+    <form class="mt-[var(--space-lg)] flex flex-col gap-[var(--space-sm)]" method="post" action="/api/submit">
+      <!-- Honeypot — must stay empty; bots fill it, humans never see it -->
+      <div class="hidden" aria-hidden="true">
+        <label>
+          Leave this field empty
+          <input type="text" name="website" tabindex="-1" autocomplete="off" />
+        </label>
+      </div>
+
       <label class="flex flex-col gap-[var(--space-2xs)] text-sm font-semibold">
         Name
         <input
@@ -45,12 +57,52 @@ const contactSchema = {
           class="rounded-md border border-border bg-bg px-[var(--space-sm)] py-[var(--space-2xs)] text-base"
         ></textarea>
       </label>
+
+      <p id="error" class="text-sm font-semibold text-accent" style="display: none;"></p>
+
       <button
         type="submit"
-        class="mt-[var(--space-2xs)] self-start rounded-md bg-accent px-[var(--space-md)] py-[var(--space-xs)] font-semibold text-accent-contrast transition-opacity hover:opacity-90"
+        class="mt-[var(--space-2xs)] self-start rounded-md bg-accent px-[var(--space-md)] py-[var(--space-xs)] font-semibold text-accent-contrast transition-opacity hover:opacity-90 disabled:opacity-60"
       >
-        Send message
+        Send
       </button>
     </form>
   </section>
 </Base>
+
+<script>
+  const form = document.querySelector('form');
+  const success = document.getElementById('success');
+  const error = document.getElementById('error');
+  const button = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    button.disabled = true;
+    button.textContent = 'Sending...';
+    error.style.display = 'none';
+
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        body: new FormData(form),
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        form.style.display = 'none';
+        success.style.display = 'block';
+      } else {
+        error.textContent = data.error ?? 'Something went wrong.';
+        error.style.display = 'block';
+        button.disabled = false;
+        button.textContent = 'Send';
+      }
+    } catch {
+      error.textContent = 'Something went wrong. Please try again.';
+      error.style.display = 'block';
+      button.disabled = false;
+      button.textContent = 'Send';
+    }
+  });
+</script>

@@ -72,10 +72,15 @@ public/
 - Target: 100/100 Lighthouse mobile
 
 ## Forms
-- POST to /functions/api/submit.js
-- Inline JS — no page redirect
-- Honeypot field required
-- RESEND_API_KEY in Cloudflare env vars only
+- Handler: functions/api/submit.js
+- Sends via Resend from: sent@onclik.com
+- reply_to: set to submitter's email
+- to: sent@onclik.com (default — update per project
+  to client's email in submit.js)
+- Inline JS submission — no page redirect
+- Honeypot field required on every form
+- RESEND_API_KEY stored in Cloudflare env vars only
+- Never hardcode API keys in any file
 
 ## Launch checklist
 - [ ] site.config.mjs filled
