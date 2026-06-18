@@ -1,39 +1,39 @@
-# Project brief
+# Project Brief
 
-> Fill this in when launching a new site from the Clear template.
-> This is the single source of truth for the project's identity.
-
-## Identity
-
-- **Project / client name:** _____
-- **Domain:** _____.com
-- **Tagline:** _____
-- **One-line description:** _____  ← also set as `okf({ description })` in astro.config.mjs
-
-## Type
-
-- [ ] Client  →  `~/ai/brand/clients/<name>`
-- [ ] Venture →  `~/ai/brand/ventures/<name>`
-
-## Brand
-
-- **Primary / accent colour:** _____  ← set `--c-accent` in `src/styles/tokens.css`
-- **Light background:** _____
-- **Dark background:** _____
-- **Fonts:** Mulish (default) — change in `Base.astro` + `--font-sans` if different
+## Project
+- Client name:
+- Domain:
+- Tagline:
+- Site type: (local business / professional / e-commerce / SaaS)
+- Primary keyword:
 
 ## Pages
+- Home:
+- About:
+- Contact:
 
-- [ ] Home (`/`)
-- [ ] About (`/about`)
-- [ ] Contact (`/contact`)
-- [ ] _____
+## Brand
+- Primary color:
+- Accent color:
+- Background:
+- Text color:
+- Font heading:
+- Font body:
+- Logo: (text or image)
+
+## Target audience
+-
+
+## Primary goal of website
+-
+
+## Competitors
+-
 
 ## Integrations
-
-- **Contact form provider:** Resend (set `RESEND_API_KEY` in Cloudflare Pages — never commit it)
-- **Analytics:** _____
+- Contact form: Resend
+- Analytics: (yes/no)
+- Other:
 
 ## Notes
-
-_____
+-

@@ -1,60 +1,91 @@
-# Clear — Astro template
+# template-clear — Claude Code Instructions
 
-> Brand & base template for fast, clean, statically-hosted sites.
-> Copy this folder to start a new client or venture site. See the launch SOP at
-> `~/ai/_system/sop/template-clear-launch.md`.
+## What this is
+A production-ready Astro template for brandandco projects.
+Light/dark, fluid type, full SEO/AIO stack, Cloudflare Pages.
+
+## Single source of truth
+src/site.config.mjs — edit this first on every project.
+Never edit SEO.astro, JsonLD.astro, astro.config.mjs
+for client data.
 
 ## Stack
-
-- **Astro 6** — static output (`output: 'static'`), no SSR adapter
-- **Tailwind CSS v4** — via `@tailwindcss/vite` (CSS-first config, no `tailwind.config`)
-- **Mulish** — self-hosted with `@fontsource/mulish` (imported in `Base.astro`)
-- **Cloudflare Pages** — hosting (build: `npm run build`, output: `dist/`)
-- **@astrojs/sitemap** — generates `sitemap-index.xml`
-- **OKF integration** (`src/integrations/okf.js`) — generates `llms.txt` + `okf/bundle.json` on build
-
-## Commands
-
-```bash
-npm install        # install deps
-npm run dev        # local dev server
-npm run build      # production build → dist/
-npm run preview    # preview the build
-```
+- Astro 6, Tailwind 4, static output
+- Cloudflare Pages (no adapter needed)
+- Mulish self-hosted via fontsource
+- No React, no Vue, no SSR
 
 ## Structure
-
-```
 src/
-  components/   Header, Footer, SEO, Drawer
-  layouts/      Base.astro — html shell, theme init, drawer/theme JS
-  pages/        index, about, contact
-  styles/       global.css (tailwind + base), tokens.css (design tokens)
-  integrations/ okf.js — llms.txt + OKF bundle generator
-public/         robots.txt, llms.txt, favicons, fonts/, okf/
-```
+  components/
+    Header.astro      ← logo, nav, hamburger, drawer
+    Footer.astro      ← copyright, theme toggle
+    SEO.astro         ← all meta tags
+    JsonLD.astro      ← all structured data
+    Drawer.astro      ← slide-out nav panel
+  layouts/
+    Base.astro        ← wraps every page
+  pages/
+    index.astro       ← home
+    about.astro       ← about
+    contact.astro     ← contact + form
+    404.astro         ← not found
+    robots.txt.ts     ← dynamic, reads site.config
+  styles/
+    global.css        ← resets, base styles
+    tokens.css        ← design tokens (type, space, color)
+  integrations/
+    okf.js            ← builds llms.txt + OKF bundle
+  site.config.mjs     ← SINGLE SOURCE OF TRUTH
 
-## Design system
+public/
+  fonts/              ← self-hosted Mulish woff2
+  okf/                ← generated OKF bundle
+  favicon.svg         ← template favicon
+  og-default.png      ← default OG image 1200x630
+  _headers            ← Cloudflare cache + security
+  llms.txt            ← generated at build
+  robots.txt          ← generated at build
 
-- **Tokens** live in `src/styles/tokens.css`.
-- **Fluid type** — `--text-xs … --text-5xl` (in `@theme`), used as Tailwind utilities (`text-lg`, `text-5xl`, …).
-- **Fluid space** — `--space-2xs … --space-3xl`, used as arbitrary utilities, e.g. `px-[var(--space-md)]`.
-- **Colours** — semantic tokens (`--c-bg`, `--c-text`, `--c-accent`, …) mapped to utilities (`bg-bg`, `text-muted`, `border-border`, `bg-accent`). Override the dark values under `body.dark`.
+## On every new project
+1. Copy template to correct folder
+2. Edit src/site.config.mjs
+3. Edit astro.config.mjs okf pages map
+4. Edit brief.md
+5. Run npm run build to verify
+6. Push to GitHub → Cloudflare auto-deploys
 
-## Theming
+## SEO/AIO stack (auto-generated every build)
+- JSON-LD: WebSite + Organization + WebPage +
+  BreadcrumbList on every page
+- robots.txt: all AI crawlers explicitly allowed
+- llms.txt: org info + per-page summaries
+- OKF bundle: index.md + per-page .md + bundle.json
+- sitemap.xml: auto via @astrojs/sitemap
 
-Light/dark is a `dark` class on `<html>`, persisted to `localStorage` (`theme`) and
-defaulting to the system preference. A no-flash inline script in `<head>` sets it
-before paint; `[data-theme-toggle]` buttons flip it.
+## Performance rules
+- No Google Fonts — self-hosted only
+- No external scripts
+- Inline critical CSS
+- font-display: swap always
+- Images: use <Image /> from astro:assets only
+- Target: 100/100 Lighthouse mobile
 
-## Layout
+## Forms
+- POST to /functions/api/submit.js
+- Inline JS — no page redirect
+- Honeypot field required
+- RESEND_API_KEY in Cloudflare env vars only
 
-- Top nav: logo left, nav centre, hamburger right.
-- Slide-out drawer (`Drawer.astro`): 40vw, right edge, on mobile and desktop; opened by
-  `[data-drawer-open]`, closed by overlay click, close button, or Escape.
-
-## Conventions
-
-- Edit source styles in `src/styles/` — never hand-edit compiled CSS.
-- Keep it static: do not add an SSR adapter unless a page genuinely needs server rendering.
-- Update `site` in `astro.config.mjs` and the `okf({ name, description })` options per project.
+## Launch checklist
+- [ ] site.config.mjs filled
+- [ ] brief.md filled
+- [ ] astro.config.mjs okf pages map filled
+- [ ] npm run build passes clean
+- [ ] GitHub repo created
+- [ ] Cloudflare Pages connected
+- [ ] Custom domain connected
+- [ ] CNAME DNS record added
+- [ ] Zone optimization applied
+- [ ] RESEND_API_KEY added as secret
+- [ ] Lighthouse 100/100 verified

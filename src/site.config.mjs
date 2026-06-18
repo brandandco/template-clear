@@ -1,14 +1,16 @@
-// ─────────────────────────────────────────────────────────────
-// Single source of truth for site identity.
-// Update these per project — astro.config.mjs, SEO.astro, JsonLD.astro
-// and the OKF integration all read from here, so nothing can drift.
-// ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────
+// SINGLE SOURCE OF TRUTH
+// Edit this file only — never edit SEO.astro,
+// JsonLD.astro, or astro.config.mjs for client data.
+// This feeds: meta tags, JSON-LD, OG, robots.txt,
+// llms.txt, OKF bundle, sitemap
+// ─────────────────────────────────────
 export const siteConfig = {
-  name: 'SITE_NAME',
+  name: 'SITE_NAME',          // ← replace on launch
   description: 'SITE_DESCRIPTION',
   tagline: 'SITE_TAGLINE',
-  email: 'SITE_EMAIL',
-  phone: 'SITE_PHONE',
-  address: 'SITE_ADDRESS',
+  email: 'hello@DOMAIN.com',
+  phone: '',
+  address: '',
   domain: 'DOMAIN.com',
 };
