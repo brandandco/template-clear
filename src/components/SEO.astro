@@ -24,6 +24,7 @@ const fullTitle = `${title} | ${siteConfig.name}`;
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
+{siteConfig.noindex && <meta name="robots" content="noindex, nofollow" />}
 
 <!-- Sitemap + Favicon -->
 <link rel="sitemap" href="/sitemap-index.xml" />

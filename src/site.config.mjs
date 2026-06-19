@@ -12,5 +12,10 @@ export const siteConfig = {
   email: 'hello@DOMAIN.com',
   phone: '',
   address: '',
-  domain: 'DOMAIN.com',
+  domain: 'DOMAIN.com',          // ← real final domain (canonical/OG/schema use this)
+
+  // true while the site lives on the temporary [CLIENT].onclik.com review
+  // subdomain — emits <meta robots noindex> so Google never indexes the
+  // review build. Flip to false at launch (when the real domain goes live).
+  noindex: true,
 };
